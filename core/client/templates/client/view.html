@@ -1,0 +1,20 @@
+{% extends "client/index.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}View Assignment{% endblock %}
+{% block content %}
+<br>
+{% for assignment in assignments %}
+
+
+<a href="{% url 'client:detail-assignment' assignment.pk %}" class="block max-w-base p-6 mx-auto bg-white border border-gray-200 rounded-sm shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+
+    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{assignment.title}}</h5>
+    <p class="font-normal text-gray-700 dark:text-gray-400">{{assignment.description}}</p>
+
+    <br>
+    <p class="font-normal text-gray-700 dark:text-gray-400">Deadline: {{assignment.deadline}}</p>
+
+    </a>
+{% endfor %}
+{% endblock %}
