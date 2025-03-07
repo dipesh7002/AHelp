@@ -4,11 +4,11 @@ from django.conf import settings
 
 class AssignmentHelper(models.Model):
     user = models.OneToOneField(
-    settings.AUTH_USER_MODEL,
-    on_delete=models.CASCADE,
-    null=True,
-    blank=True
-)
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True
+    )
     name = models.CharField(max_length=50, blank=True)
     age = models.CharField(max_length=50, blank=True)
     address = models.CharField(max_length=50, blank=True)
@@ -19,10 +19,10 @@ class AssignmentHelper(models.Model):
     profile_picture = models.ImageField(blank=True)
     experience_years = models.PositiveIntegerField()
     mastery_subjects = models.ManyToManyField(Subjects)
-    total_assignment_done = models.PositiveIntegerField(editable=False)
-    average_rating = models.PositiveIntegerField(editable=False)
+    total_assignment_done = models.PositiveIntegerField(default=0)
+    average_rating = models.PositiveIntegerField(default=0)
     
-    is_active = models.BooleanField()
+    is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now=True)
     modified_at = models.DateTimeField(auto_now_add=True)
 

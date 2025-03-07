@@ -25,12 +25,3 @@ def update_profile_signal(sender, instance, created, **kwargs):
         except Profile.DoesNotExist:
             Profile.objects.create(user=instance)
 
-# class CustomUser(AbstractUser):
-#     USER_TYPE_CHOICES = (
-#     ('freelancer', 'Freelancer'),
-#     ('client', 'Client'),
-# )
-#     user_type = models.CharField(max_length=10,  choices=USER_TYPE_CHOICES)
-
-#     def __str__(self):
-#         return self.user_name 
