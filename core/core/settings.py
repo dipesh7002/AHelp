@@ -10,23 +10,22 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 import json
+from dotenv import load_dotenv
+import os
 from pathlib import Path
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-with open(BASE_DIR / 'client_secret_989376354418-8nvijj1p7e9en0tjdsdc51h523ptud55.apps.googleusercontent.com.json') as f:
-    client_secrets = json.load(f)
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
+
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-=7kxiz3e_%8!$7l)dg0x7gwsf1rj39%7*vj4ux0k17a(n$7k7j'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-=7kxiz3e_%8!$7l)dg0x7gwsf1rj39%7*vj4ux0k17a(n$7k7j')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*'] 
+
 
 
 # Application definition
@@ -154,19 +153,23 @@ COMPRESS_ROOT = BASE_DIR / 'static'
  
 COMPRESS_ENABLED = True
  
+load_dotenv()
+credentials_json = os.getenv("OAUTH")
+
+if credentials_json:
+    credentials = json.loads(credentials_json)
+    SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = credentials['installed']['client_id']
+    SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET =credentials['installed']['client_secret']
 
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = client_secrets['installed']['client_id']
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = client_secrets['installed']['client_secret']
 
 LOGIN_URL = '/auth/login/google-oauth2/'
 SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = 'http://localhost:8000/auth/complete/google-oauth2/'
 
-LOGIN_REDIRECT_URL = '/client/home/'
+LOGIN_REDIRECT_URL = '/client/viewassignments/'
 LOGOUT_REDIRECT_URL = '/'
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
 
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media/'
-

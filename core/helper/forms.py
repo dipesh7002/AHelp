@@ -4,4 +4,4 @@ from .models import AssignmentHelper
 class AssignmentHelperForm(ModelForm):
     class Meta:
         model = AssignmentHelper
-        fields = '__all__'
+        fields = ['name', 'age', 'address', 'description', 'phone_no', ] 

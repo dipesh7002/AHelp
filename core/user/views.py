@@ -9,7 +9,6 @@ def login_user(request):
     if request.user.is_authenticated:
         return redirect("/user/home")
     if request.method == "POST":
-
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(username=username, password=password)
@@ -40,7 +39,6 @@ def signup_view(request):
     else:
         form = SignupForm()
     return render(request, 'user/signup.html', {'form': form})
-
 
 def logout_user(request):
     logout(request)

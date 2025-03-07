@@ -1,43 +1,69 @@
 <!-- client/templates/client/create.html -->
-{% extends "client/index.html" %}
-{% load crispy_forms_tags %}
-
-{% block title %}Post Assignment{% endblock %}
-{% block content %}
+{% extends "client/index.html" %} {% load crispy_forms_tags %} {% block title%}
+Post Assignment {% endblock %} {% block content %}
 
 <form method="post" enctype="multipart/form-data" class="max-w-sm mx-auto">
-    {% csrf_token %}
-    <div class="mb-5">
-        <br>
-        <label for="{{ form.title.id_for_label }}" class="block mb-2 text-lg font-medium text-gray-900 dark:text-black">Title</label>
-        {{ form.title }}
-    </div>
-    <div class="mb-5">
-        <br>
-        <label for="{{ form.subject.id_for_label }}" class="block mb-2 text-lg font-medium text-gray-900 dark:text-black">Subject</label>
-        {{ form.subject }}
-    </div>
-    <div class="mb-5">
-        <br>
-        <label for="{{ form.description.id_for_label }}" class="block mb-2 text-lg font-medium text-gray-900 dark:text-black">Description</label>
-        {{ form.description }}
-    </div>
-    <div class="mb-5">
-        <br>
-        <label for="{{ form.upload_file.id_for_label }}" class="block mb-2 text-lg font-medium text-gray-900 dark:text-dark">Upload file</label>
-        {{ form.upload_file }}
-    </div>
-    <div class="mb-5">
-        <br>
-        <label for="{{ form.deadline.id_for_label }}" class="block mb-2 text-lg font-medium text-gray-900 dark:text-black">Deadline</label>
-        {{ form.deadline }}
-    </div>
-    <div class="mb-5">
-        <br>
-        <label for="{{ form.is_active.id_for_label }}" class="block mb-2 text-lg font-medium text-gray-900 dark:text-black">Is Active</label>
-        {{ form.is_active }}
-    </div>
-    <button type="submit" class="text-dark bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
+  {% csrf_token %}
+  <div class="mb-5">
+    <br />
+    <label
+      for="{{ form.title.id_for_label }}"
+      class="block mb-2 text-lg font-medium text-gray-900 dark:text-black"
+      >Title</label
+    >
+    {{ form.title }}
+  </div>
+  <div class="mb-5">
+    <br />
+    <label
+      for="{{ form.subject.id_for_label }}"
+      class="block mb-2 text-lg font-medium text-gray-900 dark:text-black"
+      >Subject</label
+    >
+    {{ form.subject }}
+  </div>
+  <div class="mb-5">
+    <br />
+    <label
+      for="{{ form.description.id_for_label }}"
+      class="block mb-2 text-lg font-medium text-gray-900 dark:text-black"
+      >Description</label
+    >
+    {{ form.description }}
+  </div>
+  <div class="mb-5">
+    <br />
+    <label
+      for="{{ form.upload_file.id_for_label }}"
+      class="block mb-2 text-lg font-medium text-gray-900 dark:text-black"
+      >Upload file</label
+    >
+    {{ form.upload_file }}
+  </div>
+  <div class="mb-5">
+    <br />
+    <label
+      for="{{ form.deadline.id_for_label }}"
+      class="block mb-2 text-lg font-medium text-gray-900 dark:text-black"
+      >Deadline</label
+    >
+    {{ form.deadline }}
+  </div>
+  <div class="mb-5">
+    <br />
+    <label
+      for="{{ form.is_active.id_for_label }}"
+      class="block mb-2 text-lg font-medium text-gray-900 dark:text-black"
+      >Is Active</label
+    >
+    {{ form.is_active }}
+  </div>
+  <button
+    type="submit"
+    class="text-dark bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+  >
+    Submit
+  </button>
 </form>
 
 {% endblock %}
