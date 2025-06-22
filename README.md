@@ -14,26 +14,6 @@ AHelp is a modular Django web application enhanced with Tailwind CSS, designed t
 
 ---
 
-## 📁 Project Structure
-
-```
-AHelp/
-├── client/            # Client-facing views and templates
-├── core/              # Core site-wide logic and configuration
-├── helper/            # Utility modules and helper functions
-├── home/              # Static pages (e.g., Home, About Us)
-├── user/              # User authentication and profiles
-├── theme/             # Tailwind CSS theme and layout configs
-├── media/uploads/     # Uploaded media files
-├── static/images/     # Static image assets
-├── db.sqlite3         # SQLite database (for development)
-├── manage.py          # Django management script
-├── package.json       # Node.js project config
-├── tailwind.config.js # Tailwind CSS configuration
-├── vercels.json       # Vercel deployment configuration
-```
-
----
 
 ## 🚀 Getting Started
 
