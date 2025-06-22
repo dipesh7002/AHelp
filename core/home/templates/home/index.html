@@ -1,171 +1,268 @@
-{% load static tailwind_tags %} {% load static %}
+{% load static tailwind_tags %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{% block title %} {% endblock %}</title>
-
+    <title>{% block title %}Assignment Helper{% endblock %}</title>
     {% tailwind_css %}
+    <style>
+      /* Custom Animations */
+      @keyframes fade-in-up {
+        from { opacity: 0; transform: translateY(20px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+      @keyframes float-circle {
+        0%, 100% { transform: translateY(0) scale(1); opacity: 0.8; }
+        50%      { transform: translateY(-20px) scale(1.1); opacity: 1; }
+      }
+      @keyframes rotate-slow {
+        from { transform: rotate(0deg); }
+        to   { transform: rotate(360deg); }
+      }
+
+      .animate-fade-in-up {
+        animation: fade-in-up 0.8s ease-out forwards;
+        opacity: 0;
+      }
+      .delay-200 { animation-delay: 0.2s; }
+      .delay-400 { animation-delay: 0.4s; }
+      .delay-600 { animation-delay: 0.6s; }
+      .delay-800 { animation-delay: 0.8s; }
+      .delay-1000 { animation-delay: 1s; }
+
+      .animate-float-circle {
+        animation: float-circle 4s ease-in-out infinite;
+      }
+      .delay-float-200 { animation-delay: 0.2s; }
+
+      .animate-rotate-slow {
+        animation: rotate-slow 20s linear infinite;
+      }
+
+      /* Decorative gradient backgrounds */
+      .hero-bg {
+        background: radial-gradient(circle at top left, rgba(34, 197, 94, 0.4), transparent),
+                    radial-gradient(circle at bottom right, rgba(16, 185, 129, 0.4), transparent),
+                    #1f2937;
+      }
+      .section-divider {
+        fill-opacity: 0.8;
+      }
+      .icon {
+  fill: #7d5252; /* Or any dark color like #333 */
+  stroke: #573333; /* If the icon uses strokes */
+}
+    </style>
   </head>
-  <body>
-    <nav class="bg-gray-800">
+  <body class="bg-gray-50 text-gray-900 antialiased">
+    <!-- Debug: Verify Tailwind by adding a styled div -->
+    <div class="bg-green-500 text-white p-2">Tailwind is running</div>
+    <!-- Navbar -->
+    <nav class="bg-gray-800 backdrop-blur-md bg-opacity-60 fixed w-full top-0 z-50 shadow-md">
       <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
         <div class="relative flex h-16 items-center justify-between">
+          <!-- Mobile menu button -->
           <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
-            <!-- Mobile menu button-->
             <button
               type="button"
-              class="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+              class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
               aria-controls="mobile-menu"
               aria-expanded="false"
             >
-              <span class="absolute -inset-0.5"></span>
               <span class="sr-only">Open main menu</span>
-              <!--
-              Icon when menu is closed.
-  
-              Menu open: "hidden", Menu closed: "block"
-            -->
-              <svg
-                class="block h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-                />
+              <!-- Menu closed icon -->
+              <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
               </svg>
-              <!--
-              Icon when menu is open.
-  
-              Menu open: "block", Menu closed: "hidden"
-            -->
-              <svg
-                class="hidden h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M6 18L18 6M6 6l12 12"
-                />
+              <!-- Menu open icon -->
+              <svg class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
           </div>
-          <div
-            class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start"
-          >
+          <!-- Logo & Links -->
+          <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
             <div class="flex flex-shrink-0 items-center">
               <img
                 class="h-10 w-auto rounded-full"
                 src="{% static 'images/assignment_logo.png' %}"
-                alt="Logo"
+                alt="Assignment Helper Logo"
               />
             </div>
             <div class="hidden sm:ml-6 sm:block">
               <div class="flex space-x-4">
-                <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
                 <a
                   href="{% url 'home:starting page' %}"
                   class="rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white"
                   aria-current="page"
-                  >Home</a
                 >
+                  Home
+                </a>
                 <a
-                  href="#"
+                  href="#find-talent"
                   class="rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
-                  >Find Talent</a
                 >
+                  Find Talent
+                </a>
                 <a
-                  href="#"
+                  href="#find-work"
                   class="rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
-                  >Find Work</a
                 >
+                  Find Work
+                </a>
                 <a
                   href="{% url 'home:about us' %}"
                   class="rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
-                  >About Us</a
                 >
+                  About Us
+                </a>
               </div>
             </div>
           </div>
-          <!-- <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-          <button type="button" class="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-            <span class="absolute -inset-1.5"></span>
-            <span class="sr-only">View notifications</span>
-            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
-            </svg>
-          </button> -->
-
-          <!-- Profile dropdown -->
-          <div
-            class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0"
-          >
+          <!-- Auth Links -->
+          <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
             {% if user.is_authenticated %}
-            <a
-              href="{% url 'user:user logout' %}"
-              class="rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
-              >Log Out</a
-            >
+              <a
+                href="{% url 'user:user logout' %}"
+                class="px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+              >
+                Log Out
+              </a>
             {% else %}
-            <a
-              href="{% url 'user:user login' %}"
-              class="rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
-              >Sign in</a
-            >
-            <!-- <button type="button" class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Green</button> -->
-
-            <a
-              href="{% url 'user:user middle' %}"
-              class="rounded-md px-3 py-2 text-base bg-green-700 hover:bg-green-800 font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
-              >Sign Up</a
-            >
-
+              <a
+                href="{% url 'user:user login' %}"
+                class="px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+              >
+                Sign In
+              </a>
+              <a
+                href="{% url 'user:user middle' %}"
+                class="ml-2 px-3 py-2 bg-green-700 text-white rounded-md text-base font-medium hover:bg-green-800"
+              >
+                Sign Up
+              </a>
             {% endif %}
           </div>
         </div>
       </div>
 
-      <!-- Mobile menu, show/hide based on menu state. -->
-      <div class="sm:hidden" id="mobile-menu">
-        <div class="space-y-1 px-2 pb-3 pt-2">
-          <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
+      <!-- Mobile Menu -->
+      <div class="sm:hidden hidden" id="mobile-menu">
+        <div class="space-y-1 px-2 pb-3 pt-2 bg-gray-800">
           <a
-            href="#"
+            href="{% url 'home:starting page' %}"
             class="block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white"
             aria-current="page"
-            >Home</a
           >
+            Home
+          </a>
           <a
-            href="#"
+            href="#find-talent"
             class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
-            >Find Talent</a
           >
+            Find Talent
+          </a>
           <a
-            href="#"
+            href="#find-work"
             class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
-            >Find Work</a
           >
+            Find Work
+          </a>
           <a
-            href="#"
+            href="{% url 'home:about us' %}"
             class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
-            >About Us</a
           >
+            About Us
+          </a>
+          {% if not user.is_authenticated %}
+            <a
+              href="{% url 'user:user login' %}"
+              class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+            >
+              Sign In
+            </a>
+            <a
+              href="{% url 'user:user middle' %}"
+              class="block rounded-md px-3 py-2 bg-green-700 text-white text-base font-medium hover:bg-green-800"
+            >
+              Sign Up
+            </a>
+          {% endif %}
         </div>
       </div>
     </nav>
 
-    {% block content %} {% endblock %}
+    {% block content %}
+    <!-- Hero / Home Section -->
+    <section id="home" class="hero-bg relative overflow-hidden pt-32 pb-24 md:pb-32">
+      <!-- Floating Circles -->
+      <div class="absolute -top-8 -left-8">
+        <div class="h-16 w-16 md:h-24 md:w-24 bg-green-400 rounded-full opacity-50 animate-float-circle"></div>
+      </div>
+      <div class="absolute -bottom-10 right-8">
+        <div class="h-20 w-20 md:h-32 md:w-32 bg-teal-400 rounded-full opacity-40 animate-float-circle delay-float-200"></div>
+      </div>
+      <div class="absolute inset-0 animate-rotate-slow">
+        <svg class="w-full h-full opacity-10" viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="400" cy="400" r="300" stroke="rgba(34,197,94,0.3)" stroke-width="2" fill="none" />
+          <circle cx="400" cy="400" r="450" stroke="rgba(16,185,129,0.2)" stroke-width="1" fill="none" />
+        </svg>
+      </div>
+
+      <div class="relative z-10 container mx-auto px-4 text-center">
+        <h1 class="text-5xl md:text-6xl font-extrabold text-white mb-6 animate-fade-in-up">
+          Welcome to Assignment Helper
+        </h1>
+        <p class="text-xl md:text-2xl text-gray-100 mb-10 animate-fade-in-up delay-200">
+          Your trusted partner for academic success across Nepal, USA, India, Canada, Australia, and more.
+        </p>
+<section id="features" class="container mx-auto px-4 space-y-6 bg-slate-50 py-8 md:py-12 lg:py-20">
+
+    <div class="mx-auto flex max-w-[58rem] flex-col items-center space-y-4 text-center">
+
+        <h2 class="font-bold text-3xl leading-[1.1] sm:text-3xl md:text-6xl">Features</h2>
+
+        <p class="max-w-[85%] leading-normal text-muted-foreground sm:text-lg sm:leading-7">
+            The product can personalize user experiences by understanding individual preferences and tailoring
+            recommendations or content based on user behavior and historical data.
+        </p>
+
+    </div>
+
+</section>
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-gray-300 py-8">
+      <div class="container mx-auto px-4 text-center">
+        <p>© {{ now.year }} Assignment Helper. All rights reserved.</p>
+      </div>
+    </footer>
+    {% endblock %}
+
+    <!-- Scripts -->
+    <script>
+      // Smooth scrolling
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth'
+          });
+        });
+      });
+
+      // Mobile menu toggle
+      const menuButton = document.querySelector('nav button');
+      const mobileMenu = document.getElementById('mobile-menu');
+      if (menuButton) {
+        menuButton.addEventListener('click', () => {
+          const openIcon = menuButton.querySelector('svg.block');
+          const closeIcon = menuButton.querySelector('svg.hidden');
+          mobileMenu.classList.toggle('hidden');
+          openIcon.classList.toggle('hidden');
+          closeIcon.classList.toggle('hidden');
+        });
+      }
+    </script>
   </body>
 </html>
