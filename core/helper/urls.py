@@ -1,8 +1,11 @@
 from django.urls import path    
-from .views import HelperHome
+from rest_framework.routers import DefaultRouter
+from helper.views import (
+    AssignmentHelperViewSet
+)
 
-app_name ='helper'
+r = DefaultRouter()
 
-urlpatterns = [
-    path('home/', HelperHome.as_view(), name='helper home')
-]
+r.register("assignment-helper", AssignmentHelperViewSet, basename="assignment-helper")
+
+urlpatterns = r.urls
