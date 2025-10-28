@@ -3,6 +3,34 @@ from core.mixins.models import CommonModel
 from django.utils.translation import gettext_lazy as _
 from authentication.models import CommonUser
 
-class AssignmentHelper(CommonModel):
-    user = models.OneToOneField(CommonUser, on_delete=models.CASCADE, verbose_name=_("User"))
+class Education(CommonModel):
+    class Level(models.CharField):
+        PRIMARY = "pri", "Primary"
+        SECONDARY = "sec", "Secondary",
+        BACHELORS = "bac", "Bachelors",
+        MASTERS = "mas", "Masters",
+        PHD = "phd", "PHD"
     
+    class Status(models.IntegerChoices):
+        ONGOING = 1, "Ongoing" 
+        COMPLETED = 2, "Completed"
+        
+    level = models.CharField(max_length=3, choices=Level.choices, verbose_name=_("Education Level"))
+    status = models.IntegerField(choices=Status.choices, verbose_name=_("Status"))
+
+class Subject(CommonModel):
+    name = models.CharField(max_length=100, verbose_name=_("Name"))
+
+
+
+class AssignmentHelper(CommonModel):
+    class Rating(models.IntegerChoices):
+        ONE = 1, "One"
+        TWO = 2, "Two"
+        THREE = 3, "Three"
+        FOUR = 4, "Four"
+        FIVE = 5, "Five"
+    user = models.OneToOneField(CommonUser, on_delete=models.CASCADE, verbose_name=_("User"))
+    pp = models.ImageField(verbose_name=_("Profile Picture"), upload_to="")
+    education = models.ForeignKey(Education, on_delete=models.CASCADE)
+    rating = models.IntegerField(null=True, blank=True)

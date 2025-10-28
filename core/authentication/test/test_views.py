@@ -1,5 +1,5 @@
 from django.test import TestCase
+from authentication.test.helper import SimpleCRUDMixinV2
 
-class TestUserAPI(TestCase):
-    def test_shit(self):
-        aa = self.assertequ
+class TestUserAPI(TestCase, SimpleCRUDMixinV2):
+    pass
