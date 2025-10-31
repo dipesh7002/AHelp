@@ -5,6 +5,6 @@ from authentication.views import CommonUserViewset
 
 r = DefaultRouter()
 
-r.register('user', CommonUserViewset, basename='user')
+r.register("user", CommonUserViewset, basename="user")
 
 urlpatterns = r.urls

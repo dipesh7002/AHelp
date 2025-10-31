@@ -3,7 +3,8 @@ from authentication.models import (
 )
 from core.mixins.serializers import CommonSerializer
 
+
 class CommonUserSerializer(CommonSerializer):
     class Meta(CommonSerializer.Meta):
         model = CommonUser
-        fields = '__all__'
+        fields = "__all__"
