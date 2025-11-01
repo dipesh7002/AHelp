@@ -1,5 +1,6 @@
 from django.urls import reverse
 from rest_framework import status
+from core.tests.prepare import create_super_user
 
 from model_bakery import baker
 import random
@@ -33,7 +34,7 @@ class SimpleCRUDMixinV2:
     def create_and_authenticate_user(
         self, email="valid@user.mail", password="validpassword"
     ):
-        user = create_superuser(email=email, password=password)
+        user = create_super_user(email=email, password=password)
         user.save()
         self.client.force_authenticate(user=user)
         return user

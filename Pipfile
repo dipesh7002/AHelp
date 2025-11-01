@@ -9,6 +9,12 @@ djangorestframework = "*"
 python-dotenv = "*"
 pillow = "*"
 model-bakery = "*"
+channels = {extras = ["daphne"], version = "*"}
+djangochannelsrestframework = "*"
+djangorestframework-simplejwt = "*"
+black = "*"
+uvicorn = "*"
+gunicorn = "*"
 
 [dev-packages]
 

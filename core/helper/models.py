@@ -29,10 +29,16 @@ class Education(CommonModel):
         max_length=3, choices=Level.choices, verbose_name=_("Education Level")
     )
     status = models.IntegerField(choices=Status.choices, verbose_name=_("Status"))
+    
+    def __str__(self):
+        return f"{self.level} - {self.status}"
 
 
 class Subject(CommonModel):
     name = models.CharField(max_length=100, verbose_name=_("Name"))
+    
+    def __str__(self):
+        return f"{self.name}" 
 
 
 class AssignmentHelper(CommonModel):
@@ -49,3 +55,6 @@ class AssignmentHelper(CommonModel):
     pp = models.ImageField(verbose_name=_("Profile Picture"), upload_to="")
     education = models.ForeignKey(Education, on_delete=models.CASCADE)
     rating = models.IntegerField(null=True, blank=True)
+
+    def __str_(self):
+        return f"{self.user__first_name} {self.user__last_name}"
