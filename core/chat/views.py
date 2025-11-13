@@ -1,3 +1,18 @@
-from django.shortcuts import render
+from rest_framework.viewsets import ModelViewSet
+from chat.models import(
+    Room, 
+    Message
+)
+from chat.serializers import(
+    RoomSerializer,
+    MessageSerializer
+)
 
-# Create your views here.
+class RoomViewSet(ModelViewSet):
+    queryset = Room.objects.all()
+    serializer_class = RoomSerializer
+    
+class MessageViewSet(ModelViewSet):
+    queryset = Message.objects.all()
+    serializer_class = MessageSerializer
+    

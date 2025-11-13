@@ -4,8 +4,7 @@ from djangochannelsrestframework.generics import GenericAsyncAPIConsumer
 from djangochannelsrestframework.observer import model_observer
 from djangochannelsrestframework.observer.generics import ObserverModelInstanceMixin, action
 
-from .models import Message, Room, User
-from .serializers import MessageSerializer, RoomSerializer, UserSerializer
+from .models import Message
 
 
 class RoomConsumer(CreateModelMixin, ObserverModelInstanceMixin, GenericAsyncAPIConsumer):

@@ -4,13 +4,6 @@ from core.mixins.models import CommonModel
 from django.utils.translation import gettext_lazy as _
 
 
-class BaseUser(CommonModel, AbstractBaseUser):
-    # aa = models.
-    # ad = mo
-    # email = models
-    pass
-
-
 class CommonUser(AbstractBaseUser, CommonModel):
     class Gender:
         MALE = 1, _("Male")

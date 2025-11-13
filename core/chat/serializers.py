@@ -1,16 +1,18 @@
-from .models import User, Room, Message
+from .models import Room, Message
+from authentication.serializers import CommonUserSerializer
+from authentication.models import CommonUser
 from rest_framework import serializers
 
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
+        model = CommonUser
         exclude = ["password"]
 
 
 class MessageSerializer(serializers.ModelSerializer):
     created_at_formatted = serializers.SerializerMethodField()
-    user = UserSerializer()
+    user = CommonUserSerializer()
 
     class Meta:
         model = Message
