@@ -9,9 +9,9 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
-    path("auth/", include("authentication.urls")),
-    path("chat/", include("chat.urls")),
-    path("helper", include("helper.urls")),
+    path("api/auth/", include("authentication.urls")),
+    path("api/chat/", include("chat.urls")),
+    path("api/helper/", include("helper.urls")),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

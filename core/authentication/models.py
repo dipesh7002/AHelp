@@ -16,7 +16,8 @@ class CommonUser(AbstractBaseUser, CommonModel):
     )
     last_name = models.CharField(max_length=50, verbose_name=_("Last Name"))
     email = models.EmailField(unique=True, verbose_name=_("email"))
-    image = models.ImageField()
+    image = models.ImageField(null=True, blank=True, upload_to="authentication/images")
     is_staff = models.BooleanField(default=False, verbose_name=_("Is Staff"))
     REQUIRED_FIELDS = []
     USERNAME_FIELD = "email"
+

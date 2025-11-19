@@ -1,4 +1,5 @@
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.permissions import AllowAny
 from helper.models import (
     AssignmentHelper,
     Subject,
@@ -15,6 +16,7 @@ from helper.serializers import (
 class AssignmentHelperViewSet(ModelViewSet):
     queryset = AssignmentHelper.objects.all()
     serializer_class = AssignmentHelperSerializer
+    permission_classes = [AllowAny]
 
 class SubjectViewSet(ModelViewSet):
     queryset = Subject.objects.all()

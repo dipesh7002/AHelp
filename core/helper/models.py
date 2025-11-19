@@ -52,9 +52,19 @@ class AssignmentHelper(CommonModel):
     user = models.OneToOneField(
         CommonUser, on_delete=models.CASCADE, verbose_name=_("User")
     )
-    pp = models.ImageField(verbose_name=_("Profile Picture"), upload_to="")
+    pp = models.ImageField(verbose_name=_("Profile Picture"), upload_to="helper/images", null=True, blank=True)
     education = models.ForeignKey(Education, on_delete=models.CASCADE)
     rating = models.IntegerField(null=True, blank=True)
 
-    def __str_(self):
-        return f"{self.user__first_name} {self.user__last_name}"
+    def save(self, *args, **kwargs):
+        if not self.pp:
+            if hasattr(self.user, 'image') and self.user.image:
+                self.pp = self.user.image
+            else:
+                raise ValueError("you must upload profile picture as user don't have image")
+        super().save(*args, **kwargs)
+
+            
+    def __str__(self):
+        return f"{self.user.first_name}"
+    

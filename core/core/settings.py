@@ -20,13 +20,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-=7kxiz3e_%8!$7l)dg0x7gwsf1rj39%7*vj4ux0k17a(n$7k7j')
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY','django-insecure-=7kxiz3e_%8!$7l)dg0x7gwsf1rj39%7*vj4ux0k17a(n$7k7j' )
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = ['*'] 
-
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000',
+]
 
 
 # Application definition
@@ -35,19 +37,21 @@ CORE_APPS = [
     'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
+    'django.contrib.staticfiles',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
 ]
 THIRD_PARTY_APPS = [
-    'rest_framework.authtoken'
+    'rest_framework.authtoken',
+        'corsheaders',
 ]
 
 MY_APPS = [
-    'core.mixins',
     'authentication',
     'helper',
     'chat',
+    'core.mixins',
 
 ]
 
@@ -77,6 +81,7 @@ INTERNAL_IPS = [
 NPM_BIN_PATH = "C:/Program Files/nodejs/npm.cmd"
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -86,8 +91,18 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
 ]
-
 ROOT_URLCONF = 'core.urls'
+STATIC_URL = '/static/'
+
+STATICFILES_DIRS = []
+
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+COMPRESS_ENABLED = False
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
 
 TEMPLATES = [
     {
@@ -155,7 +170,3 @@ USE_TZ = True
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-COMPRESS_ROOT = BASE_DIR / 'static'
- 
-COMPRESS_ENABLED = True
- 
