@@ -1,5 +1,6 @@
 FROM python:3.10-slim
 
+# just setting up environment variables here
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PROJECT_DIR=/usr/local/app \
@@ -9,6 +10,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR ${PROJECT_DIR}
 
+# running commands
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
       build-essential \

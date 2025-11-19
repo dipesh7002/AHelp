@@ -4,7 +4,6 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-django = "*"
 djangorestframework = "*"
 python-dotenv = "*"
 pillow = "*"
@@ -15,6 +14,9 @@ djangorestframework-simplejwt = "*"
 black = "*"
 uvicorn = "*"
 gunicorn = "*"
+pytest-django = "*"
+django = "*"
+django-cors-headers = "*"
 
 [dev-packages]
 
