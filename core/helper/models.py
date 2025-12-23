@@ -64,7 +64,6 @@ class AssignmentHelper(CommonModel):
                 raise ValueError("you must upload profile picture as user don't have image")
         super().save(*args, **kwargs)
 
-            
     def __str__(self):
         return f"{self.user.first_name}"
     

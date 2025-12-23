@@ -15,12 +15,12 @@ from pathlib import Path
 from datetime import timedelta
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 
-load_dotenv
+load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('DJANGO_SECRET_KEY','django-insecure-=7kxiz3e_%8!$7l)dg0x7gwsf1rj39%7*vj4ux0k17a(n$7k7j' )
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -44,8 +44,26 @@ CORE_APPS = [
 ]
 THIRD_PARTY_APPS = [
     'rest_framework.authtoken',
-        'corsheaders',
+    'corsheaders',
+    'oauth2_provider',
+        "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.google",
+
+
 ]
+SITE_ID = 1
+
+SOCIALACCOUNT_PROVIDERS = {
+    "google": {
+        "APP": {
+            "client_id": os.getenv("GOOGLE_CLIENT_ID") ,
+            "secret": os.getenv("GOOGLE_CLIENT_SECRET") ,
+            "key": ""
+        }
+    }
+}
 
 MY_APPS = [
     'authentication',
@@ -64,6 +82,7 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
     ]
 }
 
@@ -89,8 +108,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
+    'allauth.account.middleware.AccountMiddleware',
 ]
+LOGIN_REDIRECT_URL = 'http://localhost:3000/'
+
 ROOT_URLCONF = 'core.urls'
 STATIC_URL = '/static/'
 

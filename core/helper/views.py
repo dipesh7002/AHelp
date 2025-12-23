@@ -14,9 +14,9 @@ from helper.serializers import (
 
 
 class AssignmentHelperViewSet(ModelViewSet):
+    permission_classes = [AllowAny]
     queryset = AssignmentHelper.objects.all()
     serializer_class = AssignmentHelperSerializer
-    permission_classes = [AllowAny]
 
 class SubjectViewSet(ModelViewSet):
     queryset = Subject.objects.all()

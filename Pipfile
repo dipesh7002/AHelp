@@ -17,6 +17,10 @@ gunicorn = "*"
 pytest-django = "*"
 django = "*"
 django-cors-headers = "*"
+django-oauth-toolkit = "*"
+django-allauth = "*"
+dj-rest-auth = "*"
+google-auth = "*"
 
 [dev-packages]
 

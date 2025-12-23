@@ -1,10 +1,11 @@
 from authentication.models import (
     CommonUser,
 )
-from core.mixins.serializers import CommonSerializer
+from core.mixins.serializers import ModelSerializer
+from rest_framework.serializers import ModelSerializer
 
 
-class CommonUserSerializer(CommonSerializer):
-    class Meta(CommonSerializer.Meta):
+class CommonUserSerializer(ModelSerializer):
+    class Meta:
         model = CommonUser
         fields = "__all__"
