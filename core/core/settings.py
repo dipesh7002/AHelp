@@ -28,7 +28,13 @@ DEBUG = True
 ALLOWED_HOSTS = ['*'] 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
+    'http://127.0.0.1:3000',
 ]
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+]
+
 
 
 # Application definition
@@ -53,6 +59,17 @@ THIRD_PARTY_APPS = [
 
 
 ]
+
+MY_APPS = [
+    'authentication',
+    'helper',
+    'chat',
+    'insta-connect',
+    'core.mixins',
+]
+
+INSTALLED_APPS = CORE_APPS + THIRD_PARTY_APPS + MY_APPS
+
 SITE_ID = 1
 
 SOCIALACCOUNT_PROVIDERS = {
@@ -65,15 +82,8 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
-MY_APPS = [
-    'authentication',
-    'helper',
-    'chat',
-    'core.mixins',
+AUTH_USER_MODEL = 'authentication.CommonUser'
 
-]
-
-INSTALLED_APPS = CORE_APPS + THIRD_PARTY_APPS + MY_APPS
 
 
 REST_FRAMEWORK = {
@@ -92,6 +102,8 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_LIFETIME': timedelta(days=30),
     'SLIDING_TOKEN_REFRESH_LIFETIME_LATE_USER': timedelta(days=1),
     'SLIDING_TOKEN_LIFETIME_LATE_USER': timedelta(days=30),
+    'USER_ID_FIELD': 'id',
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
 }
 
 INTERNAL_IPS = [
