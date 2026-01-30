@@ -1,7 +1,7 @@
 from django.db import models
 from authentication.models import CommonUser, CommonModel
 
-class InstagramAccount(CommonModel, CommonUser):
+class InstagramAccount(CommonModel):
     user = models.OneToOneField(CommonUser,
                                 on_delete=models.CASCADE, 
                                 related_name='instagram_account',
@@ -22,7 +22,7 @@ class InstagramAccount(CommonModel, CommonUser):
     def __str__(self):
         return f"{self.user.first_name} - @{self.instagram_username}" 
     
-class InstagramConversation(CommonModel, CommonUser):
+class InstagramConversation(CommonModel):
     instagram_account = models.ForeignKey(
         InstagramAccount,
         on_delete=models.CASCADE,

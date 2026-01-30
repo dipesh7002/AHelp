@@ -4,10 +4,9 @@ from .models import InstagramAccount, InstagramConversation, InstagramMessage, W
 
 @admin.register(InstagramAccount)
 class InstagramAccountAdmin(admin.ModelAdmin):
-    list_display = ['user', 'instagram_username', 'is_active', 'connected_at', 'last_sync']
-    list_filter = ['is_active', 'connected_at']
+    list_display = ['user', 'instagram_username']
     search_fields = ['user__username', 'instagram_username']
-    readonly_fields = ['connected_at', 'last_sync', 'instagram_business_account_id']
+    readonly_fields = ['instagram_business_account_id']
     
     fieldsets = (
         ('User', {
@@ -23,9 +22,9 @@ class InstagramAccountAdmin(admin.ModelAdmin):
             'fields': ('access_token', 'token_expires_at'),
             'classes': ('collapse',)
         }),
-        ('Status', {
-            'fields': ('is_active', 'connected_at', 'last_sync')
-        }),
+        # ('Status', {
+        #     'fields': ('is_active', 'connected_at', 'last_sync')
+        # }),
     )
 
 

@@ -55,6 +55,13 @@ class AssignmentHelper(CommonModel):
     pp = models.ImageField(verbose_name=_("Profile Picture"), upload_to="helper/images", null=True, blank=True)
     education = models.ForeignKey(Education, on_delete=models.CASCADE)
     rating = models.IntegerField(null=True, blank=True)
+    assigned_users = models.ManyToManyField(
+        CommonUser,
+        related_name="assigned_helpers",
+        blank=True,
+        verbose_name=_("Assigned Users")
+    )
+    is_available = models.BooleanField(default=True, verbose_name=_("Is Available"))
 
     def save(self, *args, **kwargs):
         if not self.pp:
