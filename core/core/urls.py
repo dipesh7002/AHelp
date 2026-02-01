@@ -17,6 +17,8 @@ urlpatterns = [
     path('auth/', include('dj_rest_auth.urls')),
     path('auth/registration/', include('dj_rest_auth.registration.urls')),
     path('auth/social/', include('allauth.socialaccount.urls')),
+    path('api/instagram/', include('insta_connect.urls')),
+    path('api/settings/', include('settings.urls')),
 
 ]
 if settings.DEBUG:
