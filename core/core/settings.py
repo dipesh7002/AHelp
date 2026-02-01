@@ -57,6 +57,7 @@ LOCAL_APPS = [
     "helper",
     "chat",
     "insta_connect",
+    "settings",               # settings management
     "core.mixins",
 ]
 
@@ -110,6 +111,18 @@ SOCIALACCOUNT_PROVIDERS = {
         }
     }
 }
+
+# settings.py
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",  # simple for dev
+        # For production you might use Redis:
+        # "BACKEND": "channels_redis.core.RedisChannelLayer",
+        # "CONFIG": {"hosts": [("127.0.0.1", 6379)]},
+    },
+}
+
 
 # --------------------------------------------------
 # REST Framework / JWT

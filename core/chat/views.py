@@ -4,11 +4,13 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import serializers
+from django.db.models import Subquery, OuterRef, Max
 from chat.models import Room, Message, Conversation
 from chat.serializers import (
     RoomSerializer,
     MessageSerializer,
-    ConversationSerializer
+    ConversationSerializer,
+    ConversationListSerializer
 )
 from authentication.permissions import (
     CanChatWithUser,
@@ -24,22 +26,39 @@ class ConversationViewSet(ModelViewSet):
     Users can only see conversations they're part of.
     SuperUsers can see all conversations.
     """
-    serializer_class = ConversationSerializer
     permission_classes = [IsAuthenticated, CanViewConversation]
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return ConversationListSerializer
+        return ConversationSerializer
     
     def get_queryset(self):
         user = self.request.user
-        
-        # SuperUser can see all conversations
+
+        # Get base queryset
         if user.role == CommonUser.Role.ADMIN:
-            return Conversation.objects.all()
-        
-        # Regular users can only see their own conversations
-        return Conversation.objects.filter(
-            participant1=user
-        ) | Conversation.objects.filter(
-            participant2=user
-        )
+            queryset = Conversation.objects.all()
+        else:
+            queryset = Conversation.objects.filter(
+                participant1=user
+            ) | Conversation.objects.filter(
+                participant2=user
+            )
+
+        # Annotate with last message data for list views
+        if self.action == 'list':
+            # Get the latest message for each conversation
+            latest_message_subquery = Message.objects.filter(
+                conversation=OuterRef('pk')
+            ).order_by('-created_at').values('text', 'created_at')[:1]
+
+            queryset = queryset.annotate(
+                last_message_text=Subquery(latest_message_subquery.values('text')[:1]),
+                last_message_created_at=Subquery(latest_message_subquery.values('created_at')[:1])
+            )
+
+        return queryset
     
     def get_serializer_context(self):
         context = super().get_serializer_context()
@@ -126,11 +145,11 @@ class MessageViewSet(ModelViewSet):
     """
     serializer_class = MessageSerializer
     permission_classes = [IsAuthenticated]
-    
+
     def get_queryset(self):
         user = self.request.user
         conversation_id = self.request.query_params.get('conversation_id')
-        
+
         if conversation_id:
             try:
                 conversation = Conversation.objects.get(id=conversation_id)
@@ -139,11 +158,11 @@ class MessageViewSet(ModelViewSet):
                     return Message.objects.filter(conversation=conversation)
             except Conversation.DoesNotExist:
                 return Message.objects.none()
-        
+
         # SuperUser can see all messages
         if user.role == CommonUser.Role.ADMIN:
             return Message.objects.all()
-        
+
         # Regular users can only see messages in their conversations
         user_conversations = Conversation.objects.filter(
             participant1=user
@@ -151,23 +170,48 @@ class MessageViewSet(ModelViewSet):
             participant2=user
         )
         return Message.objects.filter(conversation__in=user_conversations)
-    
-    def perform_create(self, serializer):
-        conversation_id = self.request.data.get('conversation')
-        user = self.request.user
-        
+
+    def create(self, request, *args, **kwargs):
+        conversation_id = request.data.get('conversation')
+        user = request.user
+
+        if not conversation_id:
+            return Response(
+                {'error': 'conversation is required'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
         try:
             conversation = Conversation.objects.get(id=conversation_id)
         except Conversation.DoesNotExist:
-            raise serializers.ValidationError("Conversation not found")
-        
+            return Response(
+                {'error': 'Conversation not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
         # Validate user can send message in this conversation
         if user.role != CommonUser.Role.ADMIN and not conversation.has_participant(user):
-            raise serializers.ValidationError("You are not part of this conversation")
-        
+            return Response(
+                {'error': 'You are not part of this conversation'},
+                status=status.HTTP_403_FORBIDDEN
+            )
+
         # Set sender and receiver
         receiver = conversation.get_other_participant(user)
-        serializer.save(sender=user, receiver=receiver, conversation=conversation)
+
+        # Create the message directly
+        message = Message.objects.create(
+            conversation=conversation,
+            sender=user,
+            receiver=receiver,
+            text=request.data.get('text', '')
+        )
+
+        # Update conversation's updated_at timestamp
+        conversation.save(update_fields=['updated_at'])
+
+        serializer = self.get_serializer(message)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
     
     @action(detail=True, methods=['post'])
     def mark_read(self, request, pk=None):

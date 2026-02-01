@@ -25,7 +25,7 @@ class RoomConsumer(CreateModelMixin, ObserverModelInstanceMixin, GenericAsyncAPI
 
     @message_activity.groups_for_signal
     def message_activity(self, instance: Message, **kwargs):
-        yield f'room__{instance.room_id}'
+        yield f'room__{instance.conversation_id}'
 
     @message_activity.groups_for_consumer
     def message_activity(self, room=None, **kwargs):

@@ -41,7 +41,32 @@ class MessageSerializer(serializers.ModelSerializer):
         return super().create(validated_data)
 
 
+class ConversationListSerializer(serializers.ModelSerializer):
+    """Serializer for conversation list views (excludes messages for performance)"""
+    participant1 = CommonUserSerializer(read_only=True)
+    participant2 = CommonUserSerializer(read_only=True)
+    last_message = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Conversation
+        fields = [
+            "id", "participant1", "participant2",
+            "created_at", "updated_at",
+            "last_message"
+        ]
+
+    def get_last_message(self, obj):
+        # Use annotated fields from the queryset
+        if hasattr(obj, 'last_message_text') and obj.last_message_text:
+            return {
+                "text": obj.last_message_text,
+                "created_at": obj.last_message_created_at
+            }
+        return None
+
+
 class ConversationSerializer(serializers.ModelSerializer):
+    """Full serializer for conversation detail views (includes messages)"""
     participant1 = CommonUserSerializer(read_only=True)
     participant2 = CommonUserSerializer(read_only=True)
     participant1_id = serializers.IntegerField(write_only=True, required=False)
@@ -53,9 +78,9 @@ class ConversationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Conversation
         fields = [
-            "id", "participant1", "participant2", 
+            "id", "participant1", "participant2",
             "participant1_id", "participant2_id",
-            "created_at", "updated_at", 
+            "created_at", "updated_at",
             "last_message", "messages", "unread_count"
         ]
         read_only_fields = ["participant1", "participant2", "created_at", "updated_at"]

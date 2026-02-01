@@ -45,7 +45,7 @@ class AssignmentHelperViewSet(ModelViewSet):
         if not user.is_authenticated:
             # Public view - show all verified helpers
             return AssignmentHelper.objects.filter(
-                user__email_verified=True,
+                # user__email_verified=True,
                 user__role=CommonUser.Role.HELPER
             )
         

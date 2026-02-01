@@ -9,27 +9,54 @@ class InstagramService:
     """
     Service class to interact with Instagram Graph API
     """
-    
+
     def __init__(self):
-        self.api_url = settings.INSTAGRAM_GRAPH_API_URL
-        self.app_id = settings.INSTAGRAM_APP_ID
-        self.app_secret = settings.INSTAGRAM_APP_SECRET
+        # Get credentials from database instead of Django settings
+        from settings.models import InstagramSettings
+        instagram_settings = InstagramSettings.objects.first()
+
+        if instagram_settings:
+            self.api_url = instagram_settings.graph_api_url
+            self.app_id = instagram_settings.app_id
+            self.app_secret = instagram_settings.app_secret
+            self.api_version = instagram_settings.api_version
+        else:
+            # Fallback to settings if database is not configured
+            self.api_url = getattr(settings, 'INSTAGRAM_GRAPH_API_URL', 'https://graph.facebook.com/v20.0')
+            self.app_id = getattr(settings, 'INSTAGRAM_APP_ID', '')
+            self.app_secret = getattr(settings, 'INSTAGRAM_APP_SECRET', '')
+            self.api_version = getattr(settings, 'INSTAGRAM_API_VERSION', 'v20.0')
     
     def get_authorization_url(self, redirect_uri):
         """
         Step 1: Generate OAuth URL for user to authorize
         User clicks this URL to connect their Instagram account
         """
-        permissions = ','.join(settings.INSTAGRAM_PERMISSIONS)
-        
+        from settings.models import InstagramSettings
+        instagram_settings = InstagramSettings.objects.first()
+
+        if instagram_settings:
+            permissions = ','.join(instagram_settings.permissions)
+            api_version = instagram_settings.api_version
+        else:
+            # Fallback permissions
+            permissions = ','.join([
+                'pages_messaging',
+                'pages_show_list',
+                'instagram_basic',
+                'instagram_manage_messages',
+                'instagram_manage_comments'
+            ])
+            api_version = self.api_version
+
         auth_url = (
-            f"https://www.facebook.com/{settings.INSTAGRAM_API_VERSION}/dialog/oauth?"
+            f"https://www.facebook.com/{api_version}/dialog/oauth?"
             f"client_id={self.app_id}"
             f"&redirect_uri={redirect_uri}"
             f"&scope={permissions}"
             f"&response_type=code"
         )
-        
+
         return auth_url
     
     def exchange_code_for_token(self, code, redirect_uri):
