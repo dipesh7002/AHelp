@@ -30,6 +30,12 @@ class CommonUserSerializer(ModelSerializer):
         extra_kwargs = {
             'password': {'write_only': True},
         }
+        read_only_fields = [
+            'is_staff',
+            'is_active',
+            'role',
+            'email_verified',
+        ]
 
     def create(self, validated_data):
         password = validated_data.pop('password', None)

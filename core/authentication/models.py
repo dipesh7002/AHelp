@@ -5,7 +5,7 @@ from core.mixins.models import CommonModel
 from django.contrib.auth.models import BaseUserManager
 
 class CommonUserManager(BaseUserManager):
-    def create_user(self, email, password=None, **extra_fields):
+    def create_user(self, email, password=None,**extra_fields):
         if not email:
             raise ValueError("Email is required")
 
@@ -79,4 +79,7 @@ class CommonUser(AbstractBaseUser, PermissionsMixin, CommonModel):
         if self.role == self.Role.ADMIN:
             self.is_staff = True
             self.is_superuser = True
+        else:
+            self.is_staff = False
+            self.is_superuser = False
         super().save(*args, **kwargs)

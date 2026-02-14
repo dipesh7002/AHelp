@@ -46,6 +46,28 @@ class IsHelperOrSuperUser(permissions.BasePermission):
         )
 
 
+class IsSelfOrAdmin(permissions.BasePermission):
+    """Permission to allow users to access/modify their own user record or admins."""
+    def has_permission(self, request, view):
+        return request.user and request.user.is_authenticated
+
+    def has_object_permission(self, request, view, obj):
+        if not request.user or not request.user.is_authenticated:
+            return False
+        return request.user.role == CommonUser.Role.ADMIN or obj == request.user
+
+
+class IsHelperSelfOrAdmin(permissions.BasePermission):
+    """Permission to allow helpers to access/modify their own helper profile or admins."""
+    def has_permission(self, request, view):
+        return request.user and request.user.is_authenticated
+
+    def has_object_permission(self, request, view, obj):
+        if not request.user or not request.user.is_authenticated:
+            return False
+        return request.user.role == CommonUser.Role.ADMIN or getattr(obj, "user", None) == request.user
+
+
 class CanChatWithUser(permissions.BasePermission):
     """
     Permission to check if user can chat with another user.
@@ -112,4 +134,3 @@ class CanViewConversation(permissions.BasePermission):
             return obj.has_participant(user)
         
         return False
-

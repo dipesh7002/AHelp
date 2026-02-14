@@ -1,14 +1,15 @@
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from .models import InstagramSettings
 from .serializers import InstagramSettingsSerializer
+from authentication.permissions import IsSuperUser
 
 
 @api_view(['GET', 'PUT', 'PATCH'])
-@permission_classes([IsAuthenticated, IsAdminUser])
+@permission_classes([IsAuthenticated, IsSuperUser])
 def instagram_settings(request):
     """
     Get or update Instagram settings
@@ -28,7 +29,7 @@ def instagram_settings(request):
 
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated, IsAdminUser])
+@permission_classes([IsAuthenticated, IsSuperUser])
 def test_instagram_connection(request):
     """
     Test Instagram API connection with current settings

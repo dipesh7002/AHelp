@@ -21,6 +21,8 @@ django-oauth-toolkit = "*"
 django-allauth = "*"
 dj-rest-auth = "*"
 google-auth = "*"
+psycopg2-binary = "*"
+pycodestyle = "*"
 
 [dev-packages]
 

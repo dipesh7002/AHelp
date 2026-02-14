@@ -13,7 +13,7 @@ from helper.serializers import (
     SubjectSerializer,
     EducationSerializer
 )
-from authentication.permissions import IsSuperUser, IsAssignmentHelper
+from authentication.permissions import IsSuperUser, IsAssignmentHelper, IsHelperSelfOrAdmin
 from authentication.models import CommonUser
 
 
@@ -31,6 +31,10 @@ class AssignmentHelperViewSet(ModelViewSet):
             return [AllowAny()]
         elif self.action in ['destroy']:
             return [IsAuthenticated(), IsSuperUser()]
+        elif self.action in ['update', 'partial_update']:
+            return [IsAuthenticated(), IsHelperSelfOrAdmin()]
+        elif self.action in ['create']:
+            return [IsAuthenticated(), IsSuperUser()]
         return [IsAuthenticated()]
     
     def get_queryset(self):
@@ -45,7 +49,7 @@ class AssignmentHelperViewSet(ModelViewSet):
         if not user.is_authenticated:
             # Public view - show all verified helpers
             return AssignmentHelper.objects.filter(
-                # user__email_verified=True,
+                user__email_verified=True,
                 user__role=CommonUser.Role.HELPER
             )
         

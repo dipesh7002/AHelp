@@ -14,12 +14,23 @@ from authentication.serializers import (
     CustomTokenObtainPairSerializer,
 )
 from authentication.verification import send_verification_email, verify_email_token
+from authentication.permissions import IsSelfOrAdmin, IsSuperUser
 
 
 class CommonUserViewset(ModelViewSet):
-    permission_classes = [AllowAny]
     queryset = CommonUser.objects.all()
     serializer_class = CommonUserSerializer
+    
+    def get_permissions(self):
+        if self.action == 'create':
+            return [AllowAny()]
+        if self.action == 'list':
+            return [IsAuthenticated(), IsSuperUser()]
+        if self.action in ['retrieve', 'update', 'partial_update', 'destroy']:
+            return [IsAuthenticated(), IsSelfOrAdmin()]
+        if self.action == 'change_password':
+            return [IsAuthenticated()]
+        return [IsAuthenticated()]
 
     @action(detail=False, methods=['post'], permission_classes=[IsAuthenticated])
     def change_password(self, request):

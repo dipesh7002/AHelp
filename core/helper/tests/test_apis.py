@@ -1,10 +1,9 @@
-from django.test import TestCase
-from core.tests.helper import SimpleCRUDMixinV2
-from helper.models import AssignmentHelper
+from django.urls import reverse
+from rest_framework import status
+from rest_framework.test import APITestCase
 
 
-class TestUserAPI(TestCase, SimpleCRUDMixinV2):
-    def setUp(self):
-        super().setUp()
-        self.model = AssignmentHelper
-        self.url = 'assignment-helper'
+class AssignmentHelperApiTests(APITestCase):
+    def test_assignment_helper_create_requires_authentication(self):
+        response = self.client.post(reverse("assignment-helper-list"), {}, format="json")
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
