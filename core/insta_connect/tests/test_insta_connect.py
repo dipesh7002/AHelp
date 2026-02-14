@@ -7,9 +7,9 @@ from insta_connect.models import InstagramAccount
 
 
 class InstaConnectTests(APITestCase):
-    def test_instagram_callback_without_code_returns_400(self):
+    def test_instagram_callback_without_code_requires_authentication(self):
         response = self.client.get(reverse("instagram-callback"))
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_instagram_account_string_representation(self):
         user = CommonUser.objects.create(

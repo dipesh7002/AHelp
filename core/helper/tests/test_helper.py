@@ -15,6 +15,9 @@ class HelperTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_education_list_is_public(self):
-        Education.objects.create(level=Education.Level.BACHELORS, status=Education.Status.ONGOING)
+        Education.objects.create(
+            level=Education.Level.BACHELORS,
+            status=Education.Status.ONGOING,
+        )
         response = self.client.get(reverse("education-list"))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
