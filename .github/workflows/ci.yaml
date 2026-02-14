@@ -39,10 +39,9 @@ jobs:
       - run: pip install pipenv
       - run: pipenv install 
 
-      - run: cd core/
-      - run: python manage.py migrate
+      - run: cd core && python manage.py migrate
 
-      - run: python manage.py test
+      - run: cd core && python manage.py test
 
 
   deploy:
