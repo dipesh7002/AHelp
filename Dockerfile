@@ -1,4 +1,4 @@
-FROM python:3.12-slim
+FROM python:3.14-slim
 
 # just setting up environment variables here
 ENV PYTHONDONTWRITEBYTECODE=1 \
@@ -35,4 +35,4 @@ RUN useradd --create-home --shell /bin/bash app && \
 USER app
 
 EXPOSE 8080
-CMD ["gunicorn", "ahelp.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "3"]
+CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "3"]

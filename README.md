@@ -1,71 +1,36 @@
-# 🌐 AHelp
+# AHelp
 
-AHelp is a modular Django web application enhanced with Tailwind CSS, designed to deliver a responsive, user-friendly support platform. It follows a clean architecture separating concerns across client interfaces, core logic, and user management.
+AHelp is a Django + Django REST Framework backend for an assignment helper website.
 
----
+## Tech Stack
 
-## 🛠 Tech Stack
+- Django
+- Django REST Framework
+- django-cors-headers
+- SQLite for local development
 
-- **Backend:** Django (Python)  
-- **Frontend:** Tailwind CSS  
-- **Database:** SQLite (Development)  
-- **Deployment:** Vercel (via `vercels.json`)  
-- **Package Management:** npm  
-
----
-
-
-## 🚀 Getting Started
-
-### 1. Clone the Repository
+## Setup
 
 ```bash
-git clone https://github.com/dipesh7002/AHelp.git
-cd AHelp
-```
-
-### 2. Set Up Python Environment
-
-```bash
-python -m venv env
-source env/bin/activate       # On Windows: env\Scripts\activate
-pip install -r requirements.txt
-```
-
-### 3. Install Frontend Dependencies
-
-```bash
-npm install
-```
-
-### 4. Run Development Server
-
-```bash
+python -m pip install django djangorestframework django-cors-headers python-dotenv
+cd core
 python manage.py migrate
 python manage.py runserver
 ```
 
-### 5. Watch Tailwind CSS
+## Auth API
 
-```bash
-npx tailwindcss -i ./static/src/input.css -o ./static/css/output.css --watch
+```text
+POST  /api/accounts/users/request-otp/
+POST  /api/accounts/users/verify-otp/
+PATCH /api/accounts/users/profile/
+
+POST  /api/accounts/writers/request-otp/
+POST  /api/accounts/writers/verify-otp/
+PATCH /api/accounts/writers/profile/
+
+GET   /api/accounts/me/
 ```
 
----
-
-## ✨ Features
-
-- 🔹 Clean, modular Django app architecture  
-- 🔹 Tailwind CSS integration for modern UI  
-- 🔹 Responsive Home and About Us pages  
-- 🔹 User authentication system  
-- 🔹 Media and static file handling  
-- 🔹 Ready for Vercel deployment  
-
----
-
-## 📌 Recent Updates
-
-- ✅ Updated About Us & Home pages  
-- ✅ Improved static image handling  
-- ✅ Fixed redirection issues  
+The project uses email OTP login and returns JWT tokens after successful OTP verification.
+Writer profile completion requires a CV upload (`cv`, PDF/DOC/DOCX). After submission, the backend emails the writer details and CV attachment to `assignmenthelperr0@gmail.com` by default.
