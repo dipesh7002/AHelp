@@ -24,6 +24,10 @@ dj-rest-auth = "*"
 google-auth = "*"
 psycopg2-binary = "*"
 pycodestyle = "*"
+dj-database-url = "*"
+whitenoise = "*"
+django-storages = "*"
+boto3 = "*"
 
 [dev-packages]
 
