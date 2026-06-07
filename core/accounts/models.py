@@ -44,9 +44,14 @@ class User(AbstractUser):
     username = None
     email = models.EmailField(unique=True)
     full_name = models.CharField(max_length=150, blank=True)
+    profile_picture = models.ImageField(upload_to="users/profile-pictures/", null=True, blank=True)
+    location = models.CharField(max_length=120, blank=True)
+    bio = models.TextField(blank=True)
+    languages = models.CharField(max_length=255, blank=True)
     role = models.CharField(max_length=20, choices=Role.choices, default=Role.USER)
     is_email_verified = models.BooleanField(default=False)
     is_profile_complete = models.BooleanField(default=False)
+    last_seen_at = models.DateTimeField(null=True, blank=True)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []

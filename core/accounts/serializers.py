@@ -1,8 +1,9 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
+from rest_framework.utils import html
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from writers.models import Education, Subject, WriterProfile
+from writers.models import Education, Service, Subject, WriterProfile, WriterWorkImage
 
 User = get_user_model()
 
@@ -19,12 +20,23 @@ class OTPVerifySerializer(serializers.Serializer):
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ("full_name",)
+        fields = ("full_name", "profile_picture", "location", "bio", "languages")
 
     def update(self, instance, validated_data):
-        instance.full_name = validated_data["full_name"]
+        if "full_name" in validated_data:
+            instance.full_name = validated_data["full_name"]
+        if "profile_picture" in validated_data:
+            instance.profile_picture = validated_data["profile_picture"]
+        if "location" in validated_data:
+            instance.location = validated_data["location"]
+        if "bio" in validated_data:
+            instance.bio = validated_data["bio"]
+        if "languages" in validated_data:
+            instance.languages = validated_data["languages"]
         instance.is_profile_complete = True
-        instance.save(update_fields=["full_name", "is_profile_complete"])
+        instance.save(update_fields=[
+            "full_name", "profile_picture", "location", "bio", "languages", "is_profile_complete",
+        ])
         return instance
 
     def validate_full_name(self, value):
@@ -34,23 +46,62 @@ class UserProfileSerializer(serializers.ModelSerializer):
         return value
 
 
+class MultipleImageField(serializers.ListField):
+    def get_value(self, dictionary):
+        if html.is_html_input(dictionary):
+            files = dictionary.getlist(self.field_name)
+            if files:
+                return files
+        return super().get_value(dictionary)
+
+
 class WriterProfileSerializer(serializers.ModelSerializer):
     full_name = serializers.CharField(write_only=True)
+    profile_picture = serializers.ImageField(required=False, allow_null=True, write_only=True)
+    location = serializers.CharField(required=False, allow_blank=True, max_length=120, write_only=True)
     education = serializers.PrimaryKeyRelatedField(queryset=Education.objects.all())
     subjects = serializers.PrimaryKeyRelatedField(queryset=Subject.objects.all(), many=True, required=False)
+    services = serializers.PrimaryKeyRelatedField(queryset=Service.objects.all(), many=True, required=False)
+    work_images = MultipleImageField(
+        child=serializers.ImageField(),
+        max_length=8,
+        required=False,
+        write_only=True,
+    )
 
     class Meta:
         model = WriterProfile
-        fields = ("full_name", "profile_picture", "cv", "education", "subjects", "is_available")
+        fields = (
+            "full_name",
+            "profile_picture",
+            "cv",
+            "education",
+            "subjects",
+            "services",
+            "headline",
+            "bio",
+            "languages",
+            "location",
+            "is_available",
+            "work_images",
+        )
 
     def update(self, instance, validated_data):
         subjects = validated_data.pop("subjects", None)
+        services = validated_data.pop("services", None)
+        work_images = validated_data.pop("work_images", None)
+        profile_picture = validated_data.pop("profile_picture", serializers.empty)
+        location = validated_data.pop("location", serializers.empty)
         full_name = validated_data.pop("full_name")
 
         user = instance.user
         user.full_name = full_name
+        if profile_picture is not serializers.empty:
+            user.profile_picture = profile_picture
+        if location is not serializers.empty:
+            user.location = location
         user.is_profile_complete = True
-        user.save(update_fields=["full_name", "is_profile_complete"])
+        user.save(update_fields=["full_name", "profile_picture", "location", "is_profile_complete"])
 
         for field, value in validated_data.items():
             setattr(instance, field, value)
@@ -60,6 +111,14 @@ class WriterProfileSerializer(serializers.ModelSerializer):
 
         if subjects is not None:
             instance.subjects.set(subjects)
+        if services is not None:
+            instance.services.set(services)
+        if work_images is not None:
+            instance.work_images.all().delete()
+            WriterWorkImage.objects.bulk_create(
+                WriterWorkImage(writer_profile=instance, image=image, sort_order=index)
+                for index, image in enumerate(work_images)
+            )
         return instance
 
     def validate_full_name(self, value):
@@ -99,6 +158,7 @@ def writer_next_step(user):
 
 class MeSerializer(serializers.ModelSerializer):
     writer_approval_status = serializers.SerializerMethodField()
+    date_joined = serializers.DateTimeField(read_only=True)
 
     class Meta:
         model = User
@@ -106,7 +166,12 @@ class MeSerializer(serializers.ModelSerializer):
             "id",
             "email",
             "full_name",
+            "profile_picture",
+            "location",
+            "bio",
+            "languages",
             "role",
+            "date_joined",
             "is_email_verified",
             "is_profile_complete",
             "writer_approval_status",

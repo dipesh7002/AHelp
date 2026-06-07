@@ -34,5 +34,5 @@ RUN useradd --create-home --shell /bin/bash app && \
 
 USER app
 
-EXPOSE 8080
-CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "3"]
+EXPOSE 8000
+CMD ["uvicorn", "config.asgi:application", "--host", "0.0.0.0", "--port", "8000"]

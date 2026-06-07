@@ -96,11 +96,12 @@ class WriterOTPVerifyView(OTPVerifyView):
 
 class UserProfileView(APIView):
     permission_classes = [IsAuthenticated]
+    parser_classes = [JSONParser, MultiPartParser, FormParser]
 
     def patch(self, request):
         if request.user.role != User.Role.USER:
             return Response({"detail": "Only normal users can update this profile."}, status=status.HTTP_403_FORBIDDEN)
-        serializer = UserProfileSerializer(request.user, data=request.data)
+        serializer = UserProfileSerializer(request.user, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response({"next": "dashboard", "user": MeSerializer(request.user).data})
