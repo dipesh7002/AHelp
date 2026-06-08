@@ -1,3 +1,5 @@
+import logging
+
 from django.contrib.auth import get_user_model
 from django.db import transaction
 from rest_framework import status
@@ -21,6 +23,7 @@ from .serializers import (
 from .services import OTPError, create_and_send_otp, verify_otp
 
 User = get_user_model()
+logger = logging.getLogger(__name__)
 
 
 class OTPRequestView(APIView):
@@ -30,7 +33,18 @@ class OTPRequestView(APIView):
     def post(self, request):
         serializer = OTPRequestSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        create_and_send_otp(serializer.validated_data["email"], self.target_role)
+        try:
+            create_and_send_otp(serializer.validated_data["email"], self.target_role)
+        except Exception:
+            logger.exception(
+                "Failed to send OTP email to %s for role %s",
+                serializer.validated_data["email"],
+                self.target_role,
+            )
+            return Response(
+                {"detail": "Could not send OTP. Please try again."},
+                status=status.HTTP_503_SERVICE_UNAVAILABLE,
+            )
         return Response({"detail": "OTP sent."})
 
 
