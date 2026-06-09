@@ -239,3 +239,9 @@ WRITER_APPLICATION_TO_EMAIL = os.getenv(
     "WRITER_APPLICATION_TO_EMAIL",
     "assignmenthelperr0@gmail.com",
 )
+
+MAILJET_API_KEY = os.getenv("MAILJET_API_KEY", "")
+MAILJET_SECRET_KEY = os.getenv("MAILJET_SECRET_KEY", "")
+MAILJET_FROM_EMAIL = os.getenv("MAILJET_FROM_EMAIL", DEFAULT_FROM_EMAIL)
+MAILJET_FROM_NAME = os.getenv("MAILJET_FROM_NAME", "AHelp")
+MAILJET_API_URL = os.getenv("MAILJET_API_URL", "https://api.mailjet.com/v3.1/send")
