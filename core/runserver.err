@@ -1,2 +1,22 @@
 Loading .env environment variables...
 Watching for file changes with StatReloader
+Not Found: /
+HTTP GET / 404 [0.03, 127.0.0.1:50576]
+HTTP OPTIONS /api/accounts/me/ 200 [0.00, 127.0.0.1:59858]
+HTTP OPTIONS /api/accounts/me/ 200 [0.01, 127.0.0.1:63268]
+Unauthorized: /api/accounts/me/
+HTTP GET /api/accounts/me/ 401 [0.04, 127.0.0.1:56365]
+Unauthorized: /api/accounts/me/
+HTTP GET /api/accounts/me/ 401 [0.00, 127.0.0.1:56365]
+HTTP OPTIONS /api/token/refresh/ 200 [0.00, 127.0.0.1:56365]
+Unauthorized: /api/token/refresh/
+HTTP POST /api/token/refresh/ 401 [0.01, 127.0.0.1:56365]
+HTTP GET /api/writers/services/ 200 [0.02, 127.0.0.1:51267]
+HTTP GET /api/writers/services/ 200 [0.00, 127.0.0.1:51267]
+HTTP OPTIONS /api/accounts/users/request-otp/ 200 [0.00, 127.0.0.1:51267]
+HTTP POST /api/accounts/users/request-otp/ 200 [4.80, 127.0.0.1:51267]
+C:\Users\Dipesh\Desktop\ASSIGNMENT HELP PROJECT\AHelp\core\config\settings.py changed, reloading.
+Watching for file changes with StatReloader
+Listen failure: Couldn't listen on 127.0.0.1:8000: [WinError 10048] Only one usage of each socket address (protocol/network address/port) is normally permitted.
+C:\Users\Dipesh\Desktop\ASSIGNMENT HELP PROJECT\AHelp\core\accounts\services.py changed, reloading.
+Watching for file changes with StatReloader
